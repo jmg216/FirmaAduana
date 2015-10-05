@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://localhost:8081/WSGetPDF/services/WSFirmaPDF?wsdl" uri="xml-resources/web-service-references/WSFirmaPDF/wsdl/localhost_8081/WSGetPDF/services/WSFirmaPDF.wsdl"/>
+</catalog>
