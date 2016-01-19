@@ -14,8 +14,10 @@ import com.isa.utiles.Utiles;
 import com.isa.utiles.UtilesMsg;
 import com.isa.utiles.UtilesResources;
 import com.isa.utiles.UtilesWS;
-import com.isa.ws.PDF;
-import com.isa.ws.WSFirmaPDFWsException_Exception;
+import com.isa.ws.entities.xsd.VerifyResponse;
+import com.isa.ws.services.ValidarPDFPortType;
+import com.isa.ws.services.ValidarPDFWServiceTXException_Exception;
+import com.isa.ws.xsd.PDF;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
@@ -40,6 +42,7 @@ import java.security.UnrecoverableKeyException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
@@ -70,10 +73,6 @@ public class FirmaPDFController {
             Logger.getLogger(FirmaPDFController.class.getName()).log(Level.SEVERE, null, ex);
             throw new AppletException( UtilesMsg.ERROR_ACCEDIENDO_ARCHIVO, null, ex.getCause() );
         } 
-        catch (WSFirmaPDFWsException_Exception ex) {
-            Logger.getLogger(FirmaPDFController.class.getName()).log(Level.SEVERE, null, ex);
-            throw new AppletException( UtilesMsg.ERROR_WS_EXCEPTION, null, ex.getCause() );
-        }
         catch(Exception ex ){
             Logger.getLogger(FirmaPDFController.class.getName()).log(Level.SEVERE, null, ex);
             throw new AppletException( UtilesMsg.ERROR_WS_EXCEPTION, null, ex.getCause() );            
@@ -83,17 +82,13 @@ public class FirmaPDFController {
     public int guardarPDFWS( PDF pdf ) throws AppletException{
         
         try {
-            int codigoresponse = UtilesWS.getInstancePortWS().guardarPDFParaFirmar( pdf );
+            int codigoresponse = UtilesWS.getInstancePortWS().guardarPDF(pdf);
             
             return codigoresponse;
         } 
         catch (IOException ex) {
             Logger.getLogger(FirmaPDFController.class.getName()).log(Level.SEVERE, null, ex);
             throw new AppletException( UtilesMsg.ERROR_ACCEDIENDO_ARCHIVO, null, ex.getCause() );
-        } 
-        catch (WSFirmaPDFWsException_Exception ex) {
-            Logger.getLogger(FirmaPDFController.class.getName()).log(Level.SEVERE, null, ex);
-            throw new AppletException( UtilesMsg.ERROR_WS_EXCEPTION, null, ex.getCause() );
         } 
         catch(Exception ex ){
             Logger.getLogger(FirmaPDFController.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,8 +142,11 @@ public class FirmaPDFController {
             
             if (infoFirma.isApariencia()){
                 System.out.println("Definiendo apariencia...");
-                appearance.setSignatureGraphic( Image.getInstance(new URL( infoFirma.getRutaImagen() )) );
-                 appearance.setRenderingMode(Utiles.getModoApariencia());           
+                appearance.setRenderingMode(Utiles.getModoApariencia());           
+                
+                if (!Utiles.getModoApariencia().equals(PdfSignatureAppearance.RenderingMode.DESCRIPTION)){
+                    appearance.setSignatureGraphic( Image.getInstance(new URL( infoFirma.getRutaImagen() )) );
+                }
                 
                 int numeroPagFirma = infoFirma.getHoja() == -1 ? reader.getNumberOfPages() : infoFirma.getHoja();
                 int cantidadFirmaActuales = reader.getAcroFields().getSignatureNames().size();
@@ -194,18 +192,26 @@ public class FirmaPDFController {
         }
     }    
     
-   /* public void validarFirmaOK( boolean validar, byte[] pdffirmado ){
-        
-//        try{
-            if (validar){
-                PDFFirmaValidar validador = PDFFirmaValidar.getInstance();
-                validador.validarFirma( pdffirmado );
-            }
+    public void validarFirma( byte[] pdffirmado ) throws AppletException{
+        try{
+            ValidarPDFPortType verificarpdf = UtilesWS.getInstancePortValidarWS();
+            String pdfbase64firmando = Base64.encodeBase64String(pdffirmado);
             
-//        }
-//        catch ( AppletException e ){
-//            throw new AppletException(null, null, e);    
-//        }
-    }*/
+            VerifyResponse response = verificarpdf.validarDocumentoByDoc( pdfbase64firmando );
+            if (!response.isValida()){
+                //String msj, String stacktrace, Throwable cause
+                throw new AppletException(UtilesMsg.ERROR_UNA_FIRMA_NO_VALIDA, null, null);
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+            throw new AppletException(UtilesMsg.ERROR_ACCEDIENDO_ARCHIVO, null, null);
+        } 
+        catch (ValidarPDFWServiceTXException_Exception ex) {
+            ex.printStackTrace();;
+            Logger.getLogger(FirmaPDFController.class.getName()).log(Level.SEVERE, null, ex);
+            throw new AppletException(UtilesMsg.ERROR_VERIFICANDO_FIRMA, null, ex.getCause());
+        }
+    }
     
 }

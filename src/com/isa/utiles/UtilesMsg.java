@@ -19,6 +19,7 @@ public class UtilesMsg {
     public static String ERROR_TOKEN_BLOQUEADO = "El token se ha bloquedo.";
     public static String ERROR_TOKEN_SIN_IDENTIFICAR = "No se puede identificar el token.";
     public static String PROCESANDO_FIRMA = "Procesando firma...";
+    public static String PROCESANDO_VALIDACION = "Procesando la validación del documento.";
     public static String FIRMA_VERIFICADA_OK = "Firma verificada correctamente.";
     public static String ERROR_FIRMA_NO_VALIDA = "La firma no es válida.";
     public static String ERROR_CARGANDO_CERTIFICADOS = "Error cargando certificados.";
@@ -33,6 +34,7 @@ public class UtilesMsg {
     public static String ERROR_FIRMANDO_DOCUMENTO = "Ha ocurrido un error firmando el documento.";
     public static String ERROR_GUARDANDO_DOCUMENTO = "Ha ocurrido un error al guardar el documento. Código -1.";
     public static String ERROR_CODIGO_WS = "Código devuelto por web service es incorrecto.";
+    public static String ERROR_UNA_FIRMA_NO_VALIDA = "No se pudo validar el documento.";
     public static String DOCUMENTO_GUARDADO_OK = "Documento guardado correctamente.";
     public static String DOCUMENTO_FIRMADO_GUARDADO_OK = "Documento guardado y firmado correctamente.";
     public static String ERROR_CONEXION_WEB_SERVICES = "Ocurrió un error de conexión con los servicios web.";

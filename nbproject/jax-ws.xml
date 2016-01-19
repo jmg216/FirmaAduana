@@ -2,10 +2,10 @@
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
   <services/>
   <clients>
-    <client name="WSFirmaPDF">
-      <wsdl-url>http://localhost:8081/WSGetPDF/services/WSFirmaPDF?wsdl</wsdl-url>
-      <local-wsdl-file>localhost_8081/WSGetPDF/services/WSFirmaPDF.wsdl</local-wsdl-file>
-      <package-name forceReplace="true">com.isa.ws</package-name>
+    <client name="ValidarPDF">
+      <wsdl-url>http://localhost:8080/WSAduana_TX/services/ValidarPDF?wsdl</wsdl-url>
+      <local-wsdl-file>localhost_8080/WSAduana_TX/services/ValidarPDF.wsdl</local-wsdl-file>
+      <package-name>com.isa.ws.services</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>
@@ -22,7 +22,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://localhost:8081/WSGetPDF/services/WSFirmaPDF?wsdl</wsimport-option-value>
+          <wsimport-option-value>http://localhost:8080/WSAduana_TX/services/ValidarPDF?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>
@@ -32,9 +32,37 @@
           <wsimport-option-name>xendorsed</wsimport-option-name>
           <wsimport-option-value>true</wsimport-option-value>
         </wsimport-option>
+      </wsimport-options>
+    </client>
+    <client name="WSFirmaPDF">
+      <wsdl-url>http://localhost:8080/WSGetPDF/services/WSFirmaPDF?wsdl</wsdl-url>
+      <local-wsdl-file>localhost_8080/WSGetPDF/services/WSFirmaPDF.wsdl</local-wsdl-file>
+      <package-name>com.isa.ws</package-name>
+      <catalog-file>catalog.xml</catalog-file>
+      <wsimport-options>
         <wsimport-option>
-          <wsimport-option-name>package</wsimport-option-name>
-          <wsimport-option-value>com.isa.ws</wsimport-option-value>
+          <wsimport-option-name>extension</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>verbose</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>fork</wsimport-option-name>
+          <wsimport-option-value>false</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>wsdlLocation</wsimport-option-name>
+          <wsimport-option-value>http://localhost:8080/WSGetPDF/services/WSFirmaPDF?wsdl</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>xnocompile</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>xendorsed</wsimport-option-name>
+          <wsimport-option-value>true</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>

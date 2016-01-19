@@ -19,11 +19,10 @@ import com.isa.front.ProcesandoJPanel;
 import com.isa.plataform.KeyStoreValidator;
 import com.isa.security.ISCertSecurityManager;
 import com.isa.token.HandlerToken;
-import com.isa.utiles.StreamDataSource;
 import com.isa.utiles.Utiles;
 import com.isa.utiles.UtilesMsg;
 import com.isa.utiles.UtilesResources;
-import com.isa.ws.PDF;
+import com.isa.ws.xsd.PDF;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,8 +32,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.swing.JPanel;
 import netscape.javascript.JSObject;
 
@@ -78,12 +75,7 @@ public class Main extends javax.swing.JApplet implements ICommon{
             initComponents();
             setFrontPanelSize();
             setPanels();
-            KeyStoreValidator.setInitStoreValidator();
-            
-//            UtilesResources.setRutaProperties("http://localhost:8080/ISCert/resources/aduana/applet.properties");
-//            String cedula = "17706166";
-//            ActualCertInfo.getInstance().setCertIndex(2);
-            
+            KeyStoreValidator.setInitStoreValidator(); 
             UtilesResources.setRutaProperties(getParameter("ruta"));
             sincronizarTokens();
             ManejadorPaneles.showPanel(LoginJPanel.class.getName());
@@ -114,7 +106,7 @@ public class Main extends javax.swing.JApplet implements ICommon{
     }   
     
     
-    public void firmarPDF( String nombreDocumento ){ 
+    public void firmarPDF( final String nombreDocumento ){ 
        
         System.out.println("Metodo firmarPDF.");
         ActualCertInfo actualCertInfo = ActualCertInfo.getInstance();
@@ -131,8 +123,8 @@ public class Main extends javax.swing.JApplet implements ICommon{
                     FirmaPDFController firmapdfcontroller = FirmaPDFController.getInstance();
                     PDF dElectronico = firmapdfcontroller.obtenerPDFFromWS( nombreDocumento );
                     PDFFirma infoFirma = firmapdfcontroller.generarApariencia();
-                    
                     byte[] pdf = dElectronico.getDocumento().getValue();
+                    
                     InputStream is = new ByteArrayInputStream(pdf);
                     ByteArrayOutputStream pdfOS = firmapdfcontroller.firmar(infoFirma, is);
                     ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
@@ -141,7 +133,15 @@ public class Main extends javax.swing.JApplet implements ICommon{
                     dElectronico.getDocumento().setValue( pdfOS.toByteArray() );
                     
                     //validar firma
-                    //codigoRespuesta
+                    if (isValidar()){
+                        ManejadorPaneles.showPanelMessageInfo( UtilesMsg.PROCESANDO_VALIDACION );
+                        firmapdfcontroller.validarFirma( dElectronico.getDocumento().getValue() );             
+                        ManejadorPaneles.showPanelMessageInfo( UtilesMsg.FIRMA_VERIFICADA_OK );
+                    }
+                    else{
+                        ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
+                    }
+                    
                     int codigoRespuesta = firmapdfcontroller.guardarPDFWS( dElectronico );
                     
                     switch( codigoRespuesta ){

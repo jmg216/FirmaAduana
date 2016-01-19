@@ -5,6 +5,8 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
+import com.isa.exception.xsd.WsException;
+import com.isa.ws.xsd.PDF;
 
 
 /**
@@ -24,13 +26,10 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _PDFName_QNAME = new QName("http://ws.isa.com/xsd", "name");
-    private final static QName _PDFDocumento_QNAME = new QName("http://ws.isa.com/xsd", "documento");
-    private final static QName _ObtenerPDFParaFirmarResponseReturn_QNAME = new QName("http://ws.isa.com", "return");
+    private final static QName _GuardarPDFPdf_QNAME = new QName("http://ws.isa.com", "pdf");
     private final static QName _WSFirmaPDFWsExceptionWsException_QNAME = new QName("http://ws.isa.com", "WsException");
-    private final static QName _GuardarPDFParaFirmarPdf_QNAME = new QName("http://ws.isa.com", "pdf");
     private final static QName _ObtenerPDFParaFirmarNombre_QNAME = new QName("http://ws.isa.com", "nombre");
-    private final static QName _WsExceptionMessage_QNAME = new QName("http://exception.isa.com/xsd", "message");
+    private final static QName _ObtenerPDFParaFirmarResponseReturn_QNAME = new QName("http://ws.isa.com", "return");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.isa.ws
@@ -40,35 +39,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PDF }
+     * Create an instance of {@link GuardarPDF }
      * 
      */
-    public PDF createPDF() {
-        return new PDF();
+    public GuardarPDF createGuardarPDF() {
+        return new GuardarPDF();
     }
 
     /**
-     * Create an instance of {@link WsException }
+     * Create an instance of {@link ObtenerPDFParaValidar }
      * 
      */
-    public WsException createWsException() {
-        return new WsException();
-    }
-
-    /**
-     * Create an instance of {@link GuardarPDFParaFirmarResponse }
-     * 
-     */
-    public GuardarPDFParaFirmarResponse createGuardarPDFParaFirmarResponse() {
-        return new GuardarPDFParaFirmarResponse();
-    }
-
-    /**
-     * Create an instance of {@link GuardarPDFParaFirmar }
-     * 
-     */
-    public GuardarPDFParaFirmar createGuardarPDFParaFirmar() {
-        return new GuardarPDFParaFirmar();
+    public ObtenerPDFParaValidar createObtenerPDFParaValidar() {
+        return new ObtenerPDFParaValidar();
     }
 
     /**
@@ -77,6 +60,22 @@ public class ObjectFactory {
      */
     public WSFirmaPDFWsException createWSFirmaPDFWsException() {
         return new WSFirmaPDFWsException();
+    }
+
+    /**
+     * Create an instance of {@link GuardarPDFResponse }
+     * 
+     */
+    public GuardarPDFResponse createGuardarPDFResponse() {
+        return new GuardarPDFResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerPDFParaValidarResponse }
+     * 
+     */
+    public ObtenerPDFParaValidarResponse createObtenerPDFParaValidarResponse() {
+        return new ObtenerPDFParaValidarResponse();
     }
 
     /**
@@ -96,30 +95,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ws.isa.com/xsd", name = "name", scope = PDF.class)
-    public JAXBElement<String> createPDFName(String value) {
-        return new JAXBElement<String>(_PDFName_QNAME, String.class, PDF.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ws.isa.com/xsd", name = "documento", scope = PDF.class)
-    public JAXBElement<byte[]> createPDFDocumento(byte[] value) {
-        return new JAXBElement<byte[]>(_PDFDocumento_QNAME, byte[].class, PDF.class, ((byte[]) value));
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PDF }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.isa.com", name = "return", scope = ObtenerPDFParaFirmarResponse.class)
-    public JAXBElement<PDF> createObtenerPDFParaFirmarResponseReturn(PDF value) {
-        return new JAXBElement<PDF>(_ObtenerPDFParaFirmarResponseReturn_QNAME, PDF.class, ObtenerPDFParaFirmarResponse.class, value);
+    @XmlElementDecl(namespace = "http://ws.isa.com", name = "pdf", scope = GuardarPDF.class)
+    public JAXBElement<PDF> createGuardarPDFPdf(PDF value) {
+        return new JAXBElement<PDF>(_GuardarPDFPdf_QNAME, PDF.class, GuardarPDF.class, value);
     }
 
     /**
@@ -129,15 +110,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.isa.com", name = "WsException", scope = WSFirmaPDFWsException.class)
     public JAXBElement<WsException> createWSFirmaPDFWsExceptionWsException(WsException value) {
         return new JAXBElement<WsException>(_WSFirmaPDFWsExceptionWsException_QNAME, WsException.class, WSFirmaPDFWsException.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PDF }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ws.isa.com", name = "pdf", scope = GuardarPDFParaFirmar.class)
-    public JAXBElement<PDF> createGuardarPDFParaFirmarPdf(PDF value) {
-        return new JAXBElement<PDF>(_GuardarPDFParaFirmarPdf_QNAME, PDF.class, GuardarPDFParaFirmar.class, value);
     }
 
     /**
@@ -153,9 +125,27 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://exception.isa.com/xsd", name = "message", scope = WsException.class)
-    public JAXBElement<String> createWsExceptionMessage(String value) {
-        return new JAXBElement<String>(_WsExceptionMessage_QNAME, String.class, WsException.class, value);
+    @XmlElementDecl(namespace = "http://ws.isa.com", name = "nombre", scope = ObtenerPDFParaValidar.class)
+    public JAXBElement<String> createObtenerPDFParaValidarNombre(String value) {
+        return new JAXBElement<String>(_ObtenerPDFParaFirmarNombre_QNAME, String.class, ObtenerPDFParaValidar.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PDF }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.isa.com", name = "return", scope = ObtenerPDFParaFirmarResponse.class)
+    public JAXBElement<PDF> createObtenerPDFParaFirmarResponseReturn(PDF value) {
+        return new JAXBElement<PDF>(_ObtenerPDFParaFirmarResponseReturn_QNAME, PDF.class, ObtenerPDFParaFirmarResponse.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PDF }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.isa.com", name = "return", scope = ObtenerPDFParaValidarResponse.class)
+    public JAXBElement<PDF> createObtenerPDFParaValidarResponseReturn(PDF value) {
+        return new JAXBElement<PDF>(_ObtenerPDFParaFirmarResponseReturn_QNAME, PDF.class, ObtenerPDFParaValidarResponse.class, value);
     }
 
 }

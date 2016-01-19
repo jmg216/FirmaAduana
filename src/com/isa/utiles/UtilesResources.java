@@ -54,6 +54,7 @@ public class UtilesResources {
     public static final String PROP_MODO_FIRMA = "appletConfig.ModoFirma";
     
     public static final String PROP_WS_ENDPOINT = "appletConfig.WSEndpoint";
+    public static final String PROP_WS_ENDPOINT_VALIDACION = "appletConfig.WSEndpointValidacion";
     public static final String PROP_WS_AUTH = "appletConfig.WSAutenticacion";
     public static final String PROP_WS_USER = "appletConfig.WSUser";    
     public static final String PROP_WS_PASSWD = "appletConfig.WSPasswd";    

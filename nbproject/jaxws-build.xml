@@ -16,10 +16,27 @@
             <classpath path="${libs.jaxws21.classpath}"/>
         </taskdef>
     </target>
+    <target name="wsimport-client-ValidarPDF" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ValidarPDF"/>
+        <property name="wsdl-ValidarPDF" location="xml-resources/web-service-references/ValidarPDF/wsdl/localhost_8080/WSAduana_TX/services/ValidarPDF.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ValidarPDF" destdir="${build.generated.dir}/jax-wsCache/ValidarPDF" wsdl="${wsdl-ValidarPDF}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/WSAduana_TX/services/ValidarPDF?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${wsdl-ValidarPDF}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ValidarPDF"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ValidarPDF">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ValidarPDF" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/ValidarPDF"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/com/isa/ws/services"/>
+    </target>
     <target name="wsimport-client-WSFirmaPDF" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/WSFirmaPDF"/>
-        <property name="wsdl-WSFirmaPDF" location="xml-resources/web-service-references/WSFirmaPDF/wsdl/localhost_8081/WSGetPDF/services/WSFirmaPDF.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WSFirmaPDF" destdir="${build.generated.dir}/jax-wsCache/WSFirmaPDF" wsdl="${wsdl-WSFirmaPDF}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8081/WSGetPDF/services/WSFirmaPDF?wsdl" xnocompile="true" xendorsed="true" package="com.isa.ws">
+        <property name="wsdl-WSFirmaPDF" location="xml-resources/web-service-references/WSFirmaPDF/wsdl/localhost_8080/WSGetPDF/services/WSFirmaPDF.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/WSFirmaPDF" destdir="${build.generated.dir}/jax-wsCache/WSFirmaPDF" wsdl="${wsdl-WSFirmaPDF}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/WSGetPDF/services/WSFirmaPDF?wsdl" xnocompile="true" xendorsed="true">
             <depends file="${wsdl-WSFirmaPDF}"/>
             <produces dir="${build.generated.dir}/jax-wsCache/WSFirmaPDF"/>
         </wsimport>
@@ -33,5 +50,5 @@
         <delete dir="${build.generated.dir}/jax-wsCache/WSFirmaPDF"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/com/isa/ws"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-WSFirmaPDF"/>
+    <target name="wsimport-client-generate" depends="wsimport-client-ValidarPDF, wsimport-client-WSFirmaPDF"/>
 </project>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://services.ws.isa.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax23="http://entities.ws.isa.com/xsd" xmlns:ax21="http://exceptions.ws.isa.com/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://services.ws.isa.com">
+    <wsdl:documentation>
+		Please Type your service description here
+	</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://entities.ws.isa.com/xsd">
+            <xs:complexType name="VerifyResponse">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="signatures" nillable="true" type="ax23:Signature"/>
+                    <xs:element minOccurs="0" name="valida" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Signature">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="cn" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fecha" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="verify" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax24="http://entities.ws.isa.com/xsd" xmlns:ax22="http://exceptions.ws.isa.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://services.ws.isa.com">
+            <xs:import namespace="http://exceptions.ws.isa.com/xsd"/>
+            <xs:import namespace="http://entities.ws.isa.com/xsd"/>
+            <xs:element name="ValidarPDFWService_TXException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="WService_TXException" nillable="true" type="ax21:WService_TXException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="validarDocumentoByParams">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="nombre" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="validarDocumentoByParamsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax23:VerifyResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="validarDocumentoByDoc">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="dataSigned" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="validarDocumentoByDocResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax23:VerifyResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exceptions.ws.isa.com/xsd">
+            <xs:complexType name="WService_TXException">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="mensaje" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="validarDocumentoByParamsRequest">
+        <wsdl:part name="parameters" element="ns:validarDocumentoByParams"/>
+    </wsdl:message>
+    <wsdl:message name="validarDocumentoByParamsResponse">
+        <wsdl:part name="parameters" element="ns:validarDocumentoByParamsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ValidarPDFWService_TXException">
+        <wsdl:part name="parameters" element="ns:ValidarPDFWService_TXException"/>
+    </wsdl:message>
+    <wsdl:message name="validarDocumentoByDocRequest">
+        <wsdl:part name="parameters" element="ns:validarDocumentoByDoc"/>
+    </wsdl:message>
+    <wsdl:message name="validarDocumentoByDocResponse">
+        <wsdl:part name="parameters" element="ns:validarDocumentoByDocResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="ValidarPDFPortType">
+        <wsdl:operation name="validarDocumentoByParams">
+            <wsdl:input message="ns:validarDocumentoByParamsRequest" wsaw:Action="urn:validarDocumentoByParams"/>
+            <wsdl:output message="ns:validarDocumentoByParamsResponse" wsaw:Action="urn:validarDocumentoByParamsResponse"/>
+            <wsdl:fault message="ns:ValidarPDFWService_TXException" name="ValidarPDFWService_TXException" wsaw:Action="urn:validarDocumentoByParamsValidarPDFWService_TXException"/>
+        </wsdl:operation>
+        <wsdl:operation name="validarDocumentoByDoc">
+            <wsdl:input message="ns:validarDocumentoByDocRequest" wsaw:Action="urn:validarDocumentoByDoc"/>
+            <wsdl:output message="ns:validarDocumentoByDocResponse" wsaw:Action="urn:validarDocumentoByDocResponse"/>
+            <wsdl:fault message="ns:ValidarPDFWService_TXException" name="ValidarPDFWService_TXException" wsaw:Action="urn:validarDocumentoByDocValidarPDFWService_TXException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ValidarPDFSoap11Binding" type="ns:ValidarPDFPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="validarDocumentoByParams">
+            <soap:operation soapAction="urn:validarDocumentoByParams" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ValidarPDFWService_TXException">
+                <soap:fault use="literal" name="ValidarPDFWService_TXException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="validarDocumentoByDoc">
+            <soap:operation soapAction="urn:validarDocumentoByDoc" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ValidarPDFWService_TXException">
+                <soap:fault use="literal" name="ValidarPDFWService_TXException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="ValidarPDFSoap12Binding" type="ns:ValidarPDFPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="validarDocumentoByParams">
+            <soap12:operation soapAction="urn:validarDocumentoByParams" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ValidarPDFWService_TXException">
+                <soap12:fault use="literal" name="ValidarPDFWService_TXException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="validarDocumentoByDoc">
+            <soap12:operation soapAction="urn:validarDocumentoByDoc" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ValidarPDFWService_TXException">
+                <soap12:fault use="literal" name="ValidarPDFWService_TXException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="ValidarPDFHttpBinding" type="ns:ValidarPDFPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="validarDocumentoByParams">
+            <http:operation location="validarDocumentoByParams"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="validarDocumentoByDoc">
+            <http:operation location="validarDocumentoByDoc"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ValidarPDF">
+        <wsdl:port name="ValidarPDFHttpSoap11Endpoint" binding="ns:ValidarPDFSoap11Binding">
+            <soap:address location="http://localhost:8080/WSAduana_TX/services/ValidarPDF.ValidarPDFHttpSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="ValidarPDFHttpSoap12Endpoint" binding="ns:ValidarPDFSoap12Binding">
+            <soap12:address location="http://localhost:8080/WSAduana_TX/services/ValidarPDF.ValidarPDFHttpSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="ValidarPDFHttpEndpoint" binding="ns:ValidarPDFHttpBinding">
+            <http:address location="http://localhost:8080/WSAduana_TX/services/ValidarPDF.ValidarPDFHttpEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

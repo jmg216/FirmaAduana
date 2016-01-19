@@ -8,6 +8,7 @@ import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
+import com.isa.ws.xsd.PDF;
 
 
 /**
@@ -18,7 +19,9 @@ import javax.xml.ws.ResponseWrapper;
  */
 @WebService(name = "WSFirmaPDFPortType", targetNamespace = "http://ws.isa.com")
 @XmlSeeAlso({
-    ObjectFactory.class
+    com.isa.exception.xsd.ObjectFactory.class,
+    com.isa.ws.ObjectFactory.class,
+    com.isa.ws.xsd.ObjectFactory.class
 })
 public interface WSFirmaPDFPortType {
 
@@ -30,11 +33,11 @@ public interface WSFirmaPDFPortType {
      *     returns int
      * @throws WSFirmaPDFWsException_Exception
      */
-    @WebMethod(action = "urn:guardarPDFParaFirmar")
+    @WebMethod(action = "urn:guardarPDF")
     @WebResult(targetNamespace = "http://ws.isa.com")
-    @RequestWrapper(localName = "guardarPDFParaFirmar", targetNamespace = "http://ws.isa.com", className = "com.isa.ws.GuardarPDFParaFirmar")
-    @ResponseWrapper(localName = "guardarPDFParaFirmarResponse", targetNamespace = "http://ws.isa.com", className = "com.isa.ws.GuardarPDFParaFirmarResponse")
-    public int guardarPDFParaFirmar(
+    @RequestWrapper(localName = "guardarPDF", targetNamespace = "http://ws.isa.com", className = "com.isa.ws.GuardarPDF")
+    @ResponseWrapper(localName = "guardarPDFResponse", targetNamespace = "http://ws.isa.com", className = "com.isa.ws.GuardarPDFResponse")
+    public int guardarPDF(
         @WebParam(name = "pdf", targetNamespace = "http://ws.isa.com")
         PDF pdf)
         throws WSFirmaPDFWsException_Exception
@@ -44,7 +47,24 @@ public interface WSFirmaPDFPortType {
      * 
      * @param nombre
      * @return
-     *     returns com.isa.ws.PDF
+     *     returns com.isa.ws.xsd.PDF
+     * @throws WSFirmaPDFWsException_Exception
+     */
+    @WebMethod(action = "urn:obtenerPDFParaValidar")
+    @WebResult(targetNamespace = "http://ws.isa.com")
+    @RequestWrapper(localName = "obtenerPDFParaValidar", targetNamespace = "http://ws.isa.com", className = "com.isa.ws.ObtenerPDFParaValidar")
+    @ResponseWrapper(localName = "obtenerPDFParaValidarResponse", targetNamespace = "http://ws.isa.com", className = "com.isa.ws.ObtenerPDFParaValidarResponse")
+    public PDF obtenerPDFParaValidar(
+        @WebParam(name = "nombre", targetNamespace = "http://ws.isa.com")
+        String nombre)
+        throws WSFirmaPDFWsException_Exception
+    ;
+
+    /**
+     * 
+     * @param nombre
+     * @return
+     *     returns com.isa.ws.xsd.PDF
      * @throws WSFirmaPDFWsException_Exception
      */
     @WebMethod(action = "urn:obtenerPDFParaFirmar")
