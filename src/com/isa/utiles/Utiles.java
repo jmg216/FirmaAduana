@@ -58,7 +58,8 @@ public class Utiles {
     public static String TRUE_VALUE = "true";
     public static String PARAM_TIPO_FIRMA = "tipoFirma";
     public static String VALUE_TIPO_FIRMA_PKCS7 = "pkcs7";
-    public static String VALUE_TIPO_FIRMA_XADES_ENVELOPING = "xades";
+    public static String VALUE_TIPO_FIRMA_XADES_ENVELOPED = "xades";
+    public static String VALUE_TIPO_FIRMA_PADES = "pades";
     
     public static boolean isNullOrEmpty(String value){
         return (value == null || value.isEmpty());
@@ -406,7 +407,16 @@ public class Utiles {
             default: m = PdfSignatureAppearance.RenderingMode.DESCRIPTION;
                     break;
         }
-        
         return m;
+    }
+    
+    public static int getNumeroTipoFirma( String tipo ){
+        if (tipo.equals(VALUE_TIPO_FIRMA_PADES)){
+            return 1;
+        }
+        else if (tipo.equals(VALUE_TIPO_FIRMA_XADES_ENVELOPED)){
+            return 2;
+        }
+        return -1;
     }
 }

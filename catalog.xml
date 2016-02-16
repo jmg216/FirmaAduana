@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="http://localhost:8080/WSAduana_TX/services/ValidarPDF?wsdl" uri="xml-resources/web-service-references/ValidarPDF/wsdl/localhost_8080/WSAduana_TX/services/ValidarPDF.wsdl"/>
-    <system systemId="http://localhost:8080/WSGetPDF/services/WSFirmaPDF?wsdl" uri="xml-resources/web-service-references/WSFirmaPDF/wsdl/localhost_8080/WSGetPDF/services/WSFirmaPDF.wsdl"/>
+    <system systemId="http://localhost:8181/WSGetDoc/services/WSFirmaDoc?wsdl" uri="xml-resources/web-service-references/WSFirmaDoc/wsdl/localhost_8181/WSGetDoc/services/WSFirmaDoc.wsdl"/>
+    <system systemId="http://localhost:8181/WSAduana_TX/services/ValidarDoc?wsdl" uri="xml-resources/web-service-references/ValidarDoc/wsdl/localhost_8181/WSAduana_TX/services/ValidarDoc.wsdl"/>
 </catalog>

@@ -25,7 +25,8 @@ public class UtilesMsg {
     public static String ERROR_CARGANDO_CERTIFICADOS = "Error cargando certificados.";
     public static String ERROR_VERIFICANDO_FIRMA = "Ha ocurrido un error y no se ha podido verificar la firma.";
     public static String ERROR_AUTH = "Ha ocurrido un error en la autenticación"; 
-    
+    public static String ERROR_SERVICIOS_WEB = "Ha ocurrido un error en el servicio de firma.";
+    public static String ERROR_SERVICIOS_WEB_VALIDACION = "Ha ocurrido un error en servicio de validación.";
     public static String ERROR_ACCEDIENDO_ARCHIVO = "Ha ocurrido un error accediendo a los archivos de configuración";
     public static String ERROR_ACCEDIENDO_TOKEN = "No se ha podido obtener la información del token.";
     public static String ERROR_ACCEDIENDO_PROVEEDOR = "No se ha podido acceder al token.";
@@ -38,4 +39,5 @@ public class UtilesMsg {
     public static String DOCUMENTO_GUARDADO_OK = "Documento guardado correctamente.";
     public static String DOCUMENTO_FIRMADO_GUARDADO_OK = "Documento guardado y firmado correctamente.";
     public static String ERROR_CONEXION_WEB_SERVICES = "Ocurrió un error de conexión con los servicios web.";
+    public static String ERROR_OBTENIENDO_TIPO_DE_FIRMA= "No se pudo obtener el tipo de firma.";
 }

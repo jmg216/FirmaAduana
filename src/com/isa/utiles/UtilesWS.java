@@ -5,10 +5,10 @@
  */
 package com.isa.utiles;
 
-import com.isa.ws.WSFirmaPDF;
-import com.isa.ws.WSFirmaPDFPortType;
-import com.isa.ws.services.ValidarPDF;
-import com.isa.ws.services.ValidarPDFPortType;
+import com.isa.wsclient.WSFirmaDoc;
+import com.isa.wsclient.WSFirmaDocPortType;
+import com.isa.wscv.ValidarDoc;
+import com.isa.wscv.ValidarDocPortType;
 import java.io.IOException;
 import java.net.URL;
 import javax.xml.ws.BindingProvider;
@@ -19,30 +19,30 @@ import javax.xml.ws.BindingProvider;
  */
 public class UtilesWS {
     
-    private static WSFirmaPDFPortType port = null;
-    private static ValidarPDFPortType portvalida = null;
+    private static WSFirmaDocPortType port = null;
+    private static ValidarDocPortType portvalida = null;
     
     public static int CODIGO_RESPUESTA_ERROR = -1; 
     public static int CODIGO_RESPUESTA_OK = 1; 
             
     private UtilesWS(){}
     
-    public static ValidarPDFPortType getInstancePortValidarWS() throws IOException{
+    public static ValidarDocPortType getInstancePortValidarWS() throws IOException{
         if (portvalida == null){
             URL wsdllocation = new URL(UtilesResources.getProperty(UtilesResources.PROP_WS_ENDPOINT_VALIDACION));
-            ValidarPDF servicio = new ValidarPDF( wsdllocation );
-            portvalida = servicio.getValidarPDFHttpSoap12Endpoint();
+            ValidarDoc servicio = new ValidarDoc( wsdllocation );
+            portvalida = servicio.getValidarDocHttpSoap12Endpoint();
             BindingProvider bindingProvider = (BindingProvider) portvalida; 
             bindingProvider.getRequestContext().put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY, UtilesResources.getProperty(UtilesResources.PROP_WS_ENDPOINT_VALIDACION) );
         }
         return portvalida;        
     }
     
-    public static WSFirmaPDFPortType getInstancePortWS() throws IOException{
+    public static WSFirmaDocPortType getInstancePortWS() throws IOException{
         if (port == null){
             URL wsdllocation = new URL(UtilesResources.getProperty(UtilesResources.PROP_WS_ENDPOINT));
-            WSFirmaPDF servicio = new WSFirmaPDF( wsdllocation );
-            port = servicio.getWSFirmaPDFHttpSoap12Endpoint();
+            WSFirmaDoc servicio = new WSFirmaDoc( wsdllocation );
+            port = servicio.getWSFirmaDocHttpSoap12Endpoint();
             BindingProvider bindingProvider = (BindingProvider) port; 
             bindingProvider.getRequestContext().put( BindingProvider.ENDPOINT_ADDRESS_PROPERTY, UtilesResources.getProperty(UtilesResources.PROP_WS_ENDPOINT) );
         }

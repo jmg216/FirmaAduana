@@ -2,10 +2,10 @@
 <jax-ws xmlns="http://www.netbeans.org/ns/jax-ws/1">
   <services/>
   <clients>
-    <client name="ValidarPDF">
-      <wsdl-url>http://localhost:8080/WSAduana_TX/services/ValidarPDF?wsdl</wsdl-url>
-      <local-wsdl-file>localhost_8080/WSAduana_TX/services/ValidarPDF.wsdl</local-wsdl-file>
-      <package-name>com.isa.ws.services</package-name>
+    <client name="WSFirmaDoc">
+      <wsdl-url>http://localhost:8181/WSGetDoc/services/WSFirmaDoc?wsdl</wsdl-url>
+      <local-wsdl-file>localhost_8181/WSGetDoc/services/WSFirmaDoc.wsdl</local-wsdl-file>
+      <package-name forceReplace="true">com.isa.wsclient</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>
@@ -22,7 +22,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://localhost:8080/WSAduana_TX/services/ValidarPDF?wsdl</wsimport-option-value>
+          <wsimport-option-value>http://localhost:8181/WSGetDoc/services/WSFirmaDoc?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>
@@ -31,13 +31,17 @@
         <wsimport-option>
           <wsimport-option-name>xendorsed</wsimport-option-name>
           <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>package</wsimport-option-name>
+          <wsimport-option-value>com.isa.wsclient</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>
-    <client name="WSFirmaPDF">
-      <wsdl-url>http://localhost:8080/WSGetPDF/services/WSFirmaPDF?wsdl</wsdl-url>
-      <local-wsdl-file>localhost_8080/WSGetPDF/services/WSFirmaPDF.wsdl</local-wsdl-file>
-      <package-name>com.isa.ws</package-name>
+    <client name="ValidarDoc">
+      <wsdl-url>http://localhost:8181/WSAduana_TX/services/ValidarDoc?wsdl</wsdl-url>
+      <local-wsdl-file>localhost_8181/WSAduana_TX/services/ValidarDoc.wsdl</local-wsdl-file>
+      <package-name forceReplace="true">com.isa.wscv</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>
@@ -54,7 +58,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://localhost:8080/WSGetPDF/services/WSFirmaPDF?wsdl</wsimport-option-value>
+          <wsimport-option-value>http://localhost:8181/WSAduana_TX/services/ValidarDoc?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>
@@ -63,6 +67,10 @@
         <wsimport-option>
           <wsimport-option-name>xendorsed</wsimport-option-name>
           <wsimport-option-value>true</wsimport-option-value>
+        </wsimport-option>
+        <wsimport-option>
+          <wsimport-option-name>package</wsimport-option-name>
+          <wsimport-option-value>com.isa.wscv</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>

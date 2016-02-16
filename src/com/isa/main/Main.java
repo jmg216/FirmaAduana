@@ -10,8 +10,9 @@ import com.isa.common.FrontCommon;
 import com.isa.common.ICommon;
 import com.isa.common.ManejadorPaneles;
 import com.isa.exception.AppletException;
-import com.isa.firma.FirmaPDFController;
-import com.isa.firma.PDFFirma;
+import com.isa.firma.pades.FirmaPDFController;
+import com.isa.firma.pades.PDFFirma;
+import com.isa.firma.xades.FirmaXMLController;
 import com.isa.front.ListaCertsJPanel;
 import com.isa.front.LoginJPanel;
 import com.isa.front.MensajeJPanel;
@@ -22,7 +23,10 @@ import com.isa.token.HandlerToken;
 import com.isa.utiles.Utiles;
 import com.isa.utiles.UtilesMsg;
 import com.isa.utiles.UtilesResources;
-import com.isa.ws.xsd.PDF;
+import com.isa.utiles.UtilesWS;
+import com.isa.wsclient.Documento;
+import com.isa.wsclient.WSFirmaDocWsException_Exception;
+import com.isa.wscv.ValidarDocWSTXException_Exception;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,6 +34,7 @@ import java.io.InputStream;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -106,11 +111,15 @@ public class Main extends javax.swing.JApplet implements ICommon{
     }   
     
     
-    public void firmarPDF( final String nombreDocumento ){ 
+    public void firmarDocumento( final String[] params ){ 
        
-        System.out.println("Metodo firmarPDF.");
-        ActualCertInfo actualCertInfo = ActualCertInfo.getInstance();
+        System.out.println("Metodo firmarDocumento.");
+        for (String str : params){
+            System.out.println("Params: " + str);
+        }
+        String nombreDoc = params[1];
         
+        ActualCertInfo actualCertInfo = ActualCertInfo.getInstance();
         if (actualCertInfo.getCertIndex() == -1){
             ManejadorPaneles.showMessageCertList( UtilesMsg.ERROR_CERT_NO_SELECCIONADO );
             return;            
@@ -120,29 +129,52 @@ public class Main extends javax.swing.JApplet implements ICommon{
             @Override
             public void run(){
                 try{
-                    FirmaPDFController firmapdfcontroller = FirmaPDFController.getInstance();
-                    PDF dElectronico = firmapdfcontroller.obtenerPDFFromWS( nombreDocumento );
-                    PDFFirma infoFirma = firmapdfcontroller.generarApariencia();
-                    byte[] pdf = dElectronico.getDocumento().getValue();
                     
-                    InputStream is = new ByteArrayInputStream(pdf);
-                    ByteArrayOutputStream pdfOS = firmapdfcontroller.firmar(infoFirma, is);
-                    ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
-                    // Return the InputStream to the client.
+                    int tipo = Utiles.getNumeroTipoFirma( params[0] );
+                    if (tipo == -1){
+                        ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_OBTENIENDO_TIPO_DE_FIRMA );
+                        firmaError( UtilesMsg.ERROR_OBTENIENDO_TIPO_DE_FIRMA );
+                        return;
+                    }
                     
-                    dElectronico.getDocumento().setValue( pdfOS.toByteArray() );
+                    Documento dElectronico = null;
+                            
+                    //firma pdf
+                    if (tipo == 1){
+                        FirmaPDFController firmapdfcontroller = FirmaPDFController.getInstance();
+                        dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( Arrays.asList(params) );
+                        PDFFirma infoFirma = firmapdfcontroller.generarApariencia();
+                        byte[] pdf = dElectronico.getDocumento().getValue();
+
+                        InputStream is = new ByteArrayInputStream(pdf);
+                        ByteArrayOutputStream pdfOS = firmapdfcontroller.firmar(infoFirma, is);
+                        ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
+                        dElectronico.getDocumento().setValue( pdfOS.toByteArray() );                        
+                    }
                     
+                    if (tipo == 2){
+                        //firma xml 
+                        FirmaXMLController firmaxmlcontroller = FirmaXMLController.getInstance();
+                        dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( Arrays.asList(params) );
+                        byte[] xml  = dElectronico.getDocumento().getValue();
+                        String strXML = new String(xml);
+                        String xmlFirmado = firmaxmlcontroller.firmarXades(strXML);
+                        ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
+                        dElectronico.getDocumento().setValue( xmlFirmado.getBytes() );  
+                        
+                    }
                     //validar firma
                     if (isValidar()){
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.PROCESANDO_VALIDACION );
-                        firmapdfcontroller.validarFirma( dElectronico.getDocumento().getValue() );             
+                        UtilesWS.getInstancePortValidarWS().validarDocumentoByDoc( dElectronico.getDocumento().getValue(), 
+                                                                                    dElectronico.getTipo().getValue() );             
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.FIRMA_VERIFICADA_OK );
                     }
                     else{
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
                     }
                     
-                    int codigoRespuesta = firmapdfcontroller.guardarPDFWS( dElectronico );
+                    int codigoRespuesta = UtilesWS.getInstancePortWS().guardarDocumento( dElectronico );
                     
                     switch( codigoRespuesta ){
                         case -1:ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_GUARDANDO_DOCUMENTO );
@@ -182,15 +214,25 @@ public class Main extends javax.swing.JApplet implements ICommon{
                     Logger.getLogger(FirmaPDFController.class.getName()).log(Level.SEVERE, null, ex);
                     ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_FIRMANDO_DOCUMENTO );
                     firmaError( UtilesMsg.ERROR_FIRMANDO_DOCUMENTO );
-                }
+                } 
+                catch (WSFirmaDocWsException_Exception ex) {         
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_SERVICIOS_WEB );
+                    firmaError( UtilesMsg.ERROR_SERVICIOS_WEB );
+                } 
+                catch (ValidarDocWSTXException_Exception ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_SERVICIOS_WEB_VALIDACION );
+                    firmaError( UtilesMsg.ERROR_SERVICIOS_WEB_VALIDACION );                    
+                } 
             }
         };
         thread.start();
         System.out.println("Comienzo de hilo.");
-        ManejadorPaneles.showPanelProcesando( nombreDocumento );
+        ManejadorPaneles.showPanelProcesando( nombreDoc );
         
-    }
-    
+    }    
     
     private void firmaError(String msg){
         JSObject win = (JSObject) JSObject.getWindow(this);
