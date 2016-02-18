@@ -27,6 +27,7 @@ import com.isa.utiles.UtilesWS;
 import com.isa.wsclient.Documento;
 import com.isa.wsclient.WSFirmaDocWsException_Exception;
 import com.isa.wscv.ValidarDocWSTXException_Exception;
+import com.isa.wscv.VerifyResponse;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -166,9 +167,16 @@ public class Main extends javax.swing.JApplet implements ICommon{
                     //validar firma
                     if (isValidar()){
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.PROCESANDO_VALIDACION );
-                        UtilesWS.getInstancePortValidarWS().validarDocumentoByDoc( dElectronico.getDocumento().getValue(), 
-                                                                                    dElectronico.getTipo().getValue() );             
-                        ManejadorPaneles.showPanelMessageInfo( UtilesMsg.FIRMA_VERIFICADA_OK );
+                        VerifyResponse v = UtilesWS.getInstancePortValidarWS().validarDocumentoByDoc( dElectronico.getDocumento().getValue(), 
+                                                                                    dElectronico.getTipo().getValue() );  
+                        if (v.isValida()){
+                            ManejadorPaneles.showPanelMessageInfo( UtilesMsg.FIRMA_VERIFICADA_OK );
+                        }
+                        else{
+                            ManejadorPaneles.showPanelMessageInfo( UtilesMsg.ERROR_FIRMA_NO_VALIDA );
+                            firmaError( UtilesMsg.ERROR_FIRMA_NO_VALIDA );
+                            return;
+                        }
                     }
                     else{
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );

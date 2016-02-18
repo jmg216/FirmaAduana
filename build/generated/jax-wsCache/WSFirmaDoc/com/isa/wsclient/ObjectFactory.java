@@ -24,14 +24,14 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _GuardarDocumentoDocumento_QNAME = new QName("http://ws.isa.com", "documento");
-    private final static QName _ObtenerDocumentoParaValidarResponseReturn_QNAME = new QName("http://ws.isa.com", "return");
+    private final static QName _ObtenerDocumentoParaFirmarResponseReturn_QNAME = new QName("http://ws.isa.com", "return");
     private final static QName _WsExceptionMessage_QNAME = new QName("http://exception.isa.com/xsd", "message");
-    private final static QName _WSFirmaDocWsExceptionWsException_QNAME = new QName("http://ws.isa.com", "WsException");
+    private final static QName _GuardarDocumentoDocumento_QNAME = new QName("http://ws.isa.com", "documento");
     private final static QName _DocumentoName_QNAME = new QName("http://entities.isa.com/xsd", "name");
     private final static QName _DocumentoDocumento_QNAME = new QName("http://entities.isa.com/xsd", "documento");
     private final static QName _DocumentoTipo_QNAME = new QName("http://entities.isa.com/xsd", "tipo");
     private final static QName _DocumentoExt_QNAME = new QName("http://entities.isa.com/xsd", "ext");
+    private final static QName _WSFirmaDocWsExceptionWsException_QNAME = new QName("http://ws.isa.com", "WsException");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.isa.wsclient
@@ -116,9 +116,9 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link Documento }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.isa.com", name = "documento", scope = GuardarDocumento.class)
-    public JAXBElement<Documento> createGuardarDocumentoDocumento(Documento value) {
-        return new JAXBElement<Documento>(_GuardarDocumentoDocumento_QNAME, Documento.class, GuardarDocumento.class, value);
+    @XmlElementDecl(namespace = "http://ws.isa.com", name = "return", scope = ObtenerDocumentoParaFirmarResponse.class)
+    public JAXBElement<Documento> createObtenerDocumentoParaFirmarResponseReturn(Documento value) {
+        return new JAXBElement<Documento>(_ObtenerDocumentoParaFirmarResponseReturn_QNAME, Documento.class, ObtenerDocumentoParaFirmarResponse.class, value);
     }
 
     /**
@@ -127,16 +127,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://ws.isa.com", name = "return", scope = ObtenerDocumentoParaValidarResponse.class)
     public JAXBElement<Documento> createObtenerDocumentoParaValidarResponseReturn(Documento value) {
-        return new JAXBElement<Documento>(_ObtenerDocumentoParaValidarResponseReturn_QNAME, Documento.class, ObtenerDocumentoParaValidarResponse.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Documento }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ws.isa.com", name = "return", scope = ObtenerDocumentoParaFirmarResponse.class)
-    public JAXBElement<Documento> createObtenerDocumentoParaFirmarResponseReturn(Documento value) {
-        return new JAXBElement<Documento>(_ObtenerDocumentoParaValidarResponseReturn_QNAME, Documento.class, ObtenerDocumentoParaFirmarResponse.class, value);
+        return new JAXBElement<Documento>(_ObtenerDocumentoParaFirmarResponseReturn_QNAME, Documento.class, ObtenerDocumentoParaValidarResponse.class, value);
     }
 
     /**
@@ -149,12 +140,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link WsException }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link Documento }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.isa.com", name = "WsException", scope = WSFirmaDocWsException.class)
-    public JAXBElement<WsException> createWSFirmaDocWsExceptionWsException(WsException value) {
-        return new JAXBElement<WsException>(_WSFirmaDocWsExceptionWsException_QNAME, WsException.class, WSFirmaDocWsException.class, value);
+    @XmlElementDecl(namespace = "http://ws.isa.com", name = "documento", scope = GuardarDocumento.class)
+    public JAXBElement<Documento> createGuardarDocumentoDocumento(Documento value) {
+        return new JAXBElement<Documento>(_GuardarDocumentoDocumento_QNAME, Documento.class, GuardarDocumento.class, value);
     }
 
     /**
@@ -191,6 +182,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://entities.isa.com/xsd", name = "ext", scope = Documento.class)
     public JAXBElement<String> createDocumentoExt(String value) {
         return new JAXBElement<String>(_DocumentoExt_QNAME, String.class, Documento.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link WsException }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.isa.com", name = "WsException", scope = WSFirmaDocWsException.class)
+    public JAXBElement<WsException> createWSFirmaDocWsExceptionWsException(WsException value) {
+        return new JAXBElement<WsException>(_WSFirmaDocWsExceptionWsException_QNAME, WsException.class, WSFirmaDocWsException.class, value);
     }
 
 }
