@@ -5,8 +5,8 @@
  */
 package com.isa.utiles;
 
-import com.isa.wsclient.WSFirmaDoc;
-import com.isa.wsclient.WSFirmaDocPortType;
+import com.isa.ws.WSFirmaDoc;
+import com.isa.ws.WSFirmaDocPortType;
 import com.isa.wscv.ValidarDoc;
 import com.isa.wscv.ValidarDocPortType;
 import java.io.IOException;

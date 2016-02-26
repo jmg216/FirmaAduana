@@ -9,6 +9,7 @@ import com.isa.common.ActualCertInfo;
 import com.isa.common.FrontCommon;
 import com.isa.common.ICommon;
 import com.isa.common.ManejadorPaneles;
+import com.isa.entities.xsd.Documento;
 import com.isa.exception.AppletException;
 import com.isa.firma.pades.FirmaPDFController;
 import com.isa.firma.pades.PDFFirma;
@@ -24,8 +25,7 @@ import com.isa.utiles.Utiles;
 import com.isa.utiles.UtilesMsg;
 import com.isa.utiles.UtilesResources;
 import com.isa.utiles.UtilesWS;
-import com.isa.wsclient.Documento;
-import com.isa.wsclient.WSFirmaDocWsException_Exception;
+import com.isa.ws.WSFirmaDocWsException_Exception;
 import com.isa.wscv.ValidarDocWSTXException_Exception;
 import com.isa.wscv.VerifyResponse;
 import java.io.ByteArrayInputStream;
@@ -182,7 +182,7 @@ public class Main extends javax.swing.JApplet implements ICommon{
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
                     }
                     
-                    int codigoRespuesta = UtilesWS.getInstancePortWS().guardarDocumento( dElectronico );
+                    int codigoRespuesta = UtilesWS.getInstancePortWS().guardarDocumento(dElectronico, Arrays.asList(params) );
                     
                     switch( codigoRespuesta ){
                         case -1:ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_GUARDANDO_DOCUMENTO );

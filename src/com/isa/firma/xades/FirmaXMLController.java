@@ -16,10 +16,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import xades4j.XAdES4jException;
+import xades4j.algorithms.EnvelopedSignatureTransform;
+import xades4j.production.DataObjectReference;
 import xades4j.production.Enveloped;
+import xades4j.production.SignedDataObjects;
 import xades4j.production.XadesBesSigningProfile;
+import xades4j.production.XadesSignatureResult;
 import xades4j.production.XadesSigner;
 import xades4j.production.XadesSigningProfile;
+import xades4j.properties.CommitmentTypeProperty;
+import xades4j.properties.DataObjectDesc;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 
@@ -64,13 +70,13 @@ public class FirmaXMLController {
             Document doc = nodoFirma.getDocument();
             
             //data object reference.
-            //DataObjectDesc obj = new DataObjectReference("#someId");
             System.out.println("******* Previo a firmar ***************");
-            //XadesSignatureResult result = signer.sign(dataObjs, doc);
-            new Enveloped(signer).sign( doc.getDocumentElement() );
-            
+            //new Enveloped(signer).sign( doc.getDocumentElement() );
+            DataObjectDesc obj1 = new DataObjectReference("")
+                .withTransform(new EnvelopedSignatureTransform());
+            XadesSignatureResult result = signer.sign(new SignedDataObjects(obj1), doc.getDocumentElement());
             System.out.println("******** Firmado **************");
-            String xmlSignature = Utiles.printDocument(doc);
+            String xmlSignature = Utiles.printDocument(result.getSignature().getDocument());
             //String xmlSignatureBase64 = org.apache.xml.security.utils.Base64.encode(xmlSignature.getBytes());
             return xmlSignature;
         }
