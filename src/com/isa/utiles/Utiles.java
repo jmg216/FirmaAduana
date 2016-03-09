@@ -20,10 +20,6 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -33,7 +29,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -60,6 +58,10 @@ public class Utiles {
     public static String VALUE_TIPO_FIRMA_PKCS7 = "pkcs7";
     public static String VALUE_TIPO_FIRMA_XADES_ENVELOPED = "xades";
     public static String VALUE_TIPO_FIRMA_PADES = "pades";
+    
+    public static String PREFIJO_CIE = "CIE";
+    public static String PREFIJO_CI = "CI";
+    public static String PREFIJO_PSP = "PSP";
     
     public static boolean isNullOrEmpty(String value){
         return (value == null || value.isEmpty());
@@ -142,24 +144,6 @@ public class Utiles {
         }
         return "";
     }    
-    
-    public static String getDocIDSerialNumber( String dn ){
-            
-        String ciUserCert = Utiles.getCI( dn );
-        String cieUserCert = Utiles.getCIE( dn );
-        String pspUserCert = Utiles.getPSP( dn );
-        
-        if (!Utiles.isNullOrEmpty(ciUserCert)){
-            return ciUserCert;
-        }
-        else if (!Utiles.isNullOrEmpty(cieUserCert)){
-            return cieUserCert;
-        }
-        else if (!Utiles.isNullOrEmpty(pspUserCert)){
-            return pspUserCert;
-        }
-        return null;
-    }
     
     /**
      * Método que retorna un nombre distintivo de un usuario
@@ -360,6 +344,14 @@ public class Utiles {
         }
     }
     
+    public static byte[] documentToByte(Document document)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        XMLUtils.outputDOM(document, baos, true);
+        return baos.toByteArray();
+    }    
+    
+    
     public static String encodeFileToBase64Binary(String fileName) throws IOException {
 
             File file = new File(fileName);
@@ -419,4 +411,50 @@ public class Utiles {
         }
         return -1;
     }
+    
+ 
+    public static String getSerialNumber( String dn ){
+        System.out.println("Utiles::getSerialNumber DN: " + dn);
+        String serialnumber = "";
+        String[] arr = dn.split(",");
+        for ( int i = 0; i < arr.length; i++ ){
+            if( arr[i].startsWith(" SERIALNUMBER=") || arr[i].startsWith("SERIALNUMBER=")){
+                
+                String str = arr[i].split("=")[1];
+                str = str.trim();
+                if (str.startsWith(PREFIJO_CIE)){
+                    serialnumber = str;
+                }
+                else if (str.startsWith(PREFIJO_CI)){
+                    serialnumber = str;
+                }
+                else if (str.startsWith(PREFIJO_PSP)){
+                    serialnumber = str;
+                }
+            }
+        }
+        System.out.println("Serial number: " + serialnumber);
+        return serialnumber;
+    }
+    
+    public static String getDocIDSerialNumber( String dn ){
+        
+        String cieUserCert = Utiles.getCIE( dn );
+        String ciUserCert = Utiles.getCI( dn );
+        String pspUserCert = Utiles.getPSP( dn );
+        
+        if (!Utiles.isNullOrEmpty(cieUserCert)){
+            return cieUserCert;
+        }        
+        else if (!Utiles.isNullOrEmpty(ciUserCert)){
+            return ciUserCert;
+        }
+        else if (!Utiles.isNullOrEmpty(pspUserCert)){
+            return pspUserCert;
+        }
+        return null;
+    }
+    
+    
+    
 }

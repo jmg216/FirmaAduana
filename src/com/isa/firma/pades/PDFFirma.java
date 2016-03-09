@@ -5,7 +5,6 @@
  */
 package com.isa.firma.pades;
 
-import com.isa.utiles.Utiles;
 import com.isa.utiles.UtilesResources;
 import java.io.IOException;
 import java.security.PrivateKey;
@@ -21,23 +20,24 @@ public class PDFFirma {
     private Certificate[] chainCert;
     private String providername;
     
-    //Apariencia de firma.        
+    //Apariencia de firma.  
+    private String dn;
     private String firmante;
+    private String nroSerie;
     private String rutaImagen;
     private boolean apariencia;
-    private String textoFirma;
     private int hoja;
     private String posicionVertical;
     private int largo;
     private int ancho;
-
-    public String getTextoFirma() {
-        return textoFirma;
+    
+    public String getNroSerie() {
+        return nroSerie;
     }
 
-    public void setTextoFirma(String textoFirma) {
-        this.textoFirma = textoFirma;
-    }
+    public void setNroSerie(String nroSerie) {
+        this.nroSerie = nroSerie;
+    }    
     
     public PrivateKey getPk() {
         return pk;
@@ -119,6 +119,14 @@ public class PDFFirma {
         this.ancho = ancho;
     }
     
+    public String getDn() {
+        return dn;
+    }
+
+    public void setDn(String dn) {
+        this.dn = dn;
+    }    
+    
     public int[] calcularCorrdenadasFirma(  int cantidadFirmaActuales,  int ancho, int largo  ) throws IOException{
         //[0] llx, [1] lly, [3] urx, [4] ury
         int[] coord = new int[4];
@@ -141,5 +149,16 @@ public class PDFFirma {
         coord[3] = ury;
         
         return coord;
-    }    
+    } 
+    
+    public String generarTextoEnFirma(){
+        String str = "";
+        
+        str += getFirmante();
+        str += "\n";
+        str += getNroSerie();
+        
+        System.out.println("PDFFirma::generarTextoEnFirma: " + str);
+        return str;
+    }
 }

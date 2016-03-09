@@ -167,9 +167,6 @@ public class ListaCertsJPanel extends javax.swing.JPanel implements ICommon{
             for (; enumer.hasMoreElements();){
                 String alias = (String) enumer.nextElement();
                 X509Certificate c = (X509Certificate) keystore.getCertificate(alias);
-                
-                //SubjectDN Name: GIVENNAME=WALTER, SURNAME=SUAREZ, SERIALNUMBER=CI 17706166, CN=WALTER SUAREZ AUTENTICACION, OU=PERSONA FISICA, O=WALTER SUAREZ, C=PY
-                String docID = Utiles.getDocIDSerialNumber( c.getSubjectDN().getName() );
                 String fecha = Utiles.DATE_FORMAT_MIN.format(c.getNotBefore()) + "-" + Utiles.DATE_FORMAT_MIN.format(c.getNotAfter());
                 String [] elem = new String [] { Utiles.getCN(c.getSubjectDN().getName()), Utiles.getCN(c.getIssuerDN().getName()), fecha };
                 certs.put(String.valueOf(certs.size()), c);

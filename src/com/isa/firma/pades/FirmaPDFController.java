@@ -34,6 +34,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,12 +74,14 @@ public class FirmaPDFController {
         infofirma.setPk( (PrivateKey) token.getKeystore().getKey(alias, null) );
         infofirma.setChainCert( token.getKeystore().getCertificateChain(alias) );
         infofirma.setProvidername( token.getKeystore().getProvider().getName() );
-
         //Definiendo apariencia de firma.
         infofirma.setFirmante(alias);
-        infofirma.setTextoFirma(alias);
+        
+        X509Certificate c = (X509Certificate) token.getKeystore().getCertificate(alias);
+        infofirma.setNroSerie( Utiles.getSerialNumber( c.getSubjectDN().getName()) );
+        infofirma.setDn(c.getSubjectDN().getName());
         infofirma.setApariencia(UtilesResources.getProperty(UtilesResources.PROP_APARIENCIA).equals(UtilesResources.TRUE_VALUE));
-
+        
         if (infofirma.isApariencia()){
             infofirma.setHoja( Integer.valueOf( UtilesResources.getProperty(UtilesResources.PROP_PAG_FIRMA)) );
             infofirma.setPosicionVertical(UtilesResources.getProperty(UtilesResources.PROP_POS_VERTICAL));
@@ -111,8 +114,10 @@ public class FirmaPDFController {
                 int cantidadFirmaActuales = reader.getAcroFields().getSignatureNames().size();
                 int[] coords = infoFirma.calcularCorrdenadasFirma( cantidadFirmaActuales,  infoFirma.getAncho(), infoFirma.getLargo() );
                 
+                System.out.println("firmante: " + infoFirma.getFirmante());
+                System.out.println("serie: " + infoFirma.getNroSerie());
                 //llx, lly, urx, ury
-                appearance.setLayer2Text(infoFirma.getFirmante());
+                appearance.setLayer2Text(infoFirma.generarTextoEnFirma());
                 appearance.setVisibleSignature(new Rectangle(coords[0], coords[1], coords[2], coords[3]), numeroPagFirma, "Id: " + IdGenerator.generate());
             }
             

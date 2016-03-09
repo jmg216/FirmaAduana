@@ -43,10 +43,9 @@ public class TestXAdES {
             FirmaXMLController controller = new FirmaXMLController();
             String dataToSign = readFile("C:\\Users\\JMiraballes\\Documents\\Proyectos\\Aduana\\xmlSinFirma\\xmlFirmado-12-02-2016-144039.xml");
             String xmlFirmado = controller.firmarXades(dataToSign);
-            System.err.println("Xml Firma: " + xmlFirmado);
             
             //Output stream de xml firmado
-            outputStream(xmlFirmado);
+            //outputStream(xmlFirmado);
             
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

@@ -29,7 +29,7 @@ public class NodoFirma {
         try {
             InputStream is = new ByteArrayInputStream(data.getBytes());
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(false);
+            dbf.setNamespaceAware(true);
             document = dbf.newDocumentBuilder().parse(is); 
         } 
         catch (ParserConfigurationException ex) {
