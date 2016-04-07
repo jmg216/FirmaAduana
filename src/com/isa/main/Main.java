@@ -225,14 +225,14 @@ public class Main extends javax.swing.JApplet implements ICommon{
                 } 
                 catch (WSFirmaDocWsException_Exception ex) {         
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_SERVICIOS_WEB );
-                    firmaError( UtilesMsg.ERROR_SERVICIOS_WEB );
+                    ManejadorPaneles.showPanelMessageError( ex.getMessage() );
+                    firmaError( ex.getMessage() );
                 } 
                 catch (ValidarDocWSTXException_Exception ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_SERVICIOS_WEB_VALIDACION );
-                    firmaError( UtilesMsg.ERROR_SERVICIOS_WEB_VALIDACION );                    
+                    ManejadorPaneles.showPanelMessageError( ex.getFaultInfo().getWSTXException().getValue().getMensaje().getValue() );
+                    firmaError( ex.getFaultInfo().getWSTXException().getValue().getMensaje().getValue() );                    
                 } 
             }
         };
