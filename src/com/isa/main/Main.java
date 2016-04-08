@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -137,16 +138,21 @@ public class Main extends javax.swing.JApplet implements ICommon{
                         firmaError( UtilesMsg.ERROR_OBTENIENDO_TIPO_DE_FIRMA );
                         return;
                     }
-                    
+                    ArrayList<String> p = new ArrayList<String>();
+                    for(int i = 0; i < params.length; i++){
+                        p.add(params[i]);
+                    }
                     Documento dElectronico = null;
                             
                     //firma pdf
                     if (tipo == 1){
                         FirmaPDFController firmapdfcontroller = FirmaPDFController.getInstance();
-                        dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( Arrays.asList(params) );
                         PDFFirma infoFirma = firmapdfcontroller.generarApariencia();
+                        System.out.println("DN: " + infoFirma.getDn());
+                        p.add(infoFirma.getDn());
+                        dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( p );
                         byte[] pdf = dElectronico.getDocumento().getValue();
-
+                        
                         InputStream is = new ByteArrayInputStream(pdf);
                         ByteArrayOutputStream pdfOS = firmapdfcontroller.firmar(infoFirma, is);
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
@@ -156,7 +162,7 @@ public class Main extends javax.swing.JApplet implements ICommon{
                     if (tipo == 2){
                         //firma xml 
                         FirmaXMLController firmaxmlcontroller = FirmaXMLController.getInstance();
-                        dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( Arrays.asList(params) );
+                        dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( p );
                         byte[] xml  = dElectronico.getDocumento().getValue();
                         String strXML = new String(xml);
                         String xmlFirmado = firmaxmlcontroller.firmarXades(strXML);
