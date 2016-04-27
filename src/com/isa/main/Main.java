@@ -148,7 +148,6 @@ public class Main extends javax.swing.JApplet implements ICommon{
                     if (tipo == 1){
                         FirmaPDFController firmapdfcontroller = FirmaPDFController.getInstance();
                         PDFFirma infoFirma = firmapdfcontroller.generarApariencia();
-                        System.out.println("DN: " + infoFirma.getDn());
                         p.add(infoFirma.getDn());
                         dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( p );
                         byte[] pdf = dElectronico.getDocumento().getValue();
