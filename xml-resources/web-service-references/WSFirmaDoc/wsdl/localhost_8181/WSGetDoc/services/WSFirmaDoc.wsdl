@@ -13,17 +13,18 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="obtenerDocumentoParaFirmar">
+            <xs:element name="guardarDocumento">
                 <xs:complexType>
                     <xs:sequence>
+                        <xs:element minOccurs="0" name="documento" nillable="true" type="ax23:Documento"/>
                         <xs:element maxOccurs="unbounded" minOccurs="0" name="params" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="obtenerDocumentoParaFirmarResponse">
+            <xs:element name="guardarDocumentoResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax23:Documento"/>
+                        <xs:element name="return" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -41,18 +42,17 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="guardarDocumento">
+            <xs:element name="obtenerDocumentoParaFirmar">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="documento" nillable="true" type="ax23:Documento"/>
                         <xs:element maxOccurs="unbounded" minOccurs="0" name="params" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="guardarDocumentoResponse">
+            <xs:element name="obtenerDocumentoParaFirmarResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="return" type="xs:int"/>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax23:Documento"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -71,6 +71,7 @@
                     <xs:element minOccurs="0" name="ext" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="id" type="xs:long"/>
                     <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="param" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>

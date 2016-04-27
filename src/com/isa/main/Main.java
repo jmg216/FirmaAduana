@@ -158,7 +158,7 @@ public class Main extends javax.swing.JApplet implements ICommon{
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
                         dElectronico.getDocumento().setValue( pdfOS.toByteArray() );                        
                     }
-                    
+
                     if (tipo == 2){
                         //firma xml 
                         FirmaXMLController firmaxmlcontroller = FirmaXMLController.getInstance();
