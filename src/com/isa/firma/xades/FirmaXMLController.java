@@ -7,6 +7,8 @@ package com.isa.firma.xades;
 
 import com.isa.common.ActualCertInfo;
 import com.isa.exception.AppletException;
+import com.isa.token.HandlerToken;
+import com.isa.token.Token;
 import com.isa.utiles.Utiles;
 import com.isa.utiles.UtilesResources;
 import java.io.IOException;
@@ -46,14 +48,14 @@ public class FirmaXMLController {
         return firmaXMLController;
     }
     
-    public String firmarXades( String dataToSign ) throws AppletException {
+    public String firmarXades(String dataToSign ) throws AppletException {
         try{
-
-                
+            HandlerToken handler = ActualCertInfo.getInstance().getHandler();
+            Token token = handler.getTokenActivo();
             KeyingDataProvider kp = new PKCS11KeyStoreKeyingDataProvider(
-                                            UtilesResources.getProperty("appletConfig.LibrariesWin") + 
+                                            token.getLibrary() + 
                                             "\nshowInfo=true", 
-                                            UtilesResources.getProperty("appletConfig.Modulos"),
+                                            token.getModule(),
                                             new CertificateSelector( ActualCertInfo.getInstance().getCertIndex() ),
                                             new DirectPasswordProvider( ActualCertInfo.getInstance().getPassword()),
                                             null,
@@ -80,23 +82,22 @@ public class FirmaXMLController {
             //String xmlSignatureBase64 = org.apache.xml.security.utils.Base64.encode(xmlSignature.getBytes());
             return xmlSignature;
         }
-        
-        catch( IOException e){
-            e.printStackTrace();
-            throw new AppletException("Error accediendo a archivos de properties", null, e.getCause());        
-        }
         catch(AccessControlException e){
             e.printStackTrace();
-            throw new AppletException("", null, e.getCause());
+            throw new AppletException(e.getMessage(), null, e.getCause());
         }        
         catch(XAdES4jException e ){
             e.printStackTrace();
-            throw new AppletException("", null, e.getCause());
+            throw new AppletException(e.getMessage(), null, e.getCause());
         } 
         catch (KeyStoreException e) {
             Logger.getLogger(FirmaXMLController.class.getName()).log(Level.SEVERE, null, e);
-            throw new AppletException("", null, e.getCause());
+            throw new AppletException(e.getMessage(), null, e.getCause());
         }  
+        catch (Exception e){
+            Logger.getLogger(FirmaXMLController.class.getName()).log(Level.SEVERE, null, e);
+            throw new AppletException(e.getMessage(), null, e.getCause());
+        }
         
     }
 }

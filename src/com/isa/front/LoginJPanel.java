@@ -9,21 +9,15 @@ import com.isa.common.ActualCertInfo;
 import com.isa.common.FrontCommon;
 import com.isa.common.ICommon;
 import com.isa.common.ManejadorPaneles;
-import com.isa.exception.AppletException;
-import com.isa.main.MyTableModel;
 import com.isa.token.HandlerToken;
 import com.isa.token.Token;
 import com.isa.utiles.Utiles;
 import com.isa.utiles.UtilesMsg;
 import java.awt.Color;
 import java.io.IOException;
-import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.security.auth.login.LoginException;
@@ -174,6 +168,11 @@ public class LoginJPanel extends javax.swing.JPanel implements ICommon{
         catch (CertificateException ex) {
             mostrarMensajeError(UtilesMsg.ERROR_AUTH);
             Logger.getLogger(LoginJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (KeyStoreException ex) {
+            mostrarMensajeError(UtilesMsg.ERROR_AUTH);
+            Logger.getLogger(LoginJPanel.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed

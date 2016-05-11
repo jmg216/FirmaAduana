@@ -74,13 +74,12 @@ public class FirmaPDFController {
         infofirma.setPk( (PrivateKey) token.getKeystore().getKey(alias, null) );
         infofirma.setChainCert( token.getKeystore().getCertificateChain(alias) );
         infofirma.setProvidername( token.getKeystore().getProvider().getName() );
-        //Definiendo apariencia de firma.
-        infofirma.setFirmante(alias);
-        
+        //Definiendo apariencia de firma.        
         X509Certificate c = (X509Certificate) token.getKeystore().getCertificate(alias);
         infofirma.setNroSerie( Utiles.getSerialNumber( c.getSubjectDN().getName()) );
         infofirma.setDn(c.getSubjectDN().getName());
-        infofirma.setApariencia(UtilesResources.getProperty(UtilesResources.PROP_APARIENCIA).equals(UtilesResources.TRUE_VALUE));
+        infofirma.setFirmante(Utiles.getCN(c.getSubjectDN().getName()));
+        infofirma.setApariencia(UtilesResources.getProperty(UtilesResources.PROP_APARIENCIA).equals(UtilesResources.TRUE_VALUE));        
         
         if (infofirma.isApariencia()){
             infofirma.setHoja( Integer.valueOf( UtilesResources.getProperty(UtilesResources.PROP_PAG_FIRMA)) );

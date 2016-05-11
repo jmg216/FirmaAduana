@@ -8,13 +8,10 @@ package com.isa.token;
 import com.isa.exception.AppletException;
 import com.isa.plataform.OSValidator;
 import com.isa.utiles.Utiles;
-import com.isa.utiles.UtilesMsg;
 import com.isa.utiles.UtilesResources;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.security.auth.login.LoginException;
 
 /**
@@ -30,7 +27,7 @@ public class HandlerToken {
      * 
      * @throws com.isa.exception.AppletException
      */
-    public HandlerToken() throws AppletException   {
+    public HandlerToken() throws AppletException{
         try{
             tokens = new ArrayList();
 
@@ -48,13 +45,19 @@ public class HandlerToken {
             String[] librStr = Utiles.splitByCaracter(libraries, ",");
 
             for (int i = 0; i < modulosStr.length; i++){
-                Token token = new Token(modulosStr[i], librStr[i]);
+                Token token = new Token(modulosStr[i].trim(), librStr[i].trim());
                 tokens.add(token);
             }
         }
-        catch( IOException e ){
-            throw new AppletException(UtilesMsg.ERROR_ACCEDIENDO_ARCHIVO, null, e.getCause());
+        catch(AppletException e){
+            System.out.println("Error HandlerToken: " + e.getMessage());
+            tokens = new ArrayList();
         }
+        catch(IOException e){
+            System.out.println("Error HandlerToken: " + e.getMessage());
+            throw new AppletException(e.getMessage(), null, e.getCause());
+        }        
+        
     } 
 
     public ArrayList<Token> getTokens() {

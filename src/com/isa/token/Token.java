@@ -12,11 +12,9 @@ import com.isa.utiles.UtilesMsg;
 import com.isa.utiles.UtilesResources;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.security.AuthProvider;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.Provider;
 import java.security.ProviderException;
 import java.security.Security;
@@ -41,6 +39,7 @@ public class Token {
     private String password;
     private Boolean activo;
     private KeyStore keystore;
+    private String pkcs11config;
     private boolean logued;
     private ArrayList<X509Certificate> listaCerts;
 
@@ -61,36 +60,46 @@ public class Token {
         this.listaCerts = new ArrayList();
             
         try {    
-            String pkcs11config = Utiles.setKeyValue(UtilesResources.getProperty("appletConfig.paramName"), module);
-            pkcs11config += Utiles.setKeyValue(UtilesResources.getProperty("appletConfig.paramLibrary"), library);
-            pkcs11config += Utiles.setKeyValue(UtilesResources.getProperty("appletConfig.paramShowInfo"), showInfo.toString());
-            
-            System.out.println("Config pkcs11: " + pkcs11config);
-            
-            ByteArrayInputStream confStream = new ByteArrayInputStream(pkcs11config.getBytes());
-            Provider prov = new sun.security.pkcs11.SunPKCS11( confStream );
-            Security.addProvider( prov );
-            keystore = KeyStore.getInstance("PKCS11");
-            activo = true;
-            
+            cargarConfiguracionInit();
         }
         catch(ProviderException ex){
             Logger.getLogger(Token.class.getName()).log(Level.SEVERE, null, ex);
-            activo = false;            
-            throw new AppletException(UtilesMsg.ERROR_ACCEDIENDO_PROVEEDOR, null, ex.getCause());
+            activo = false;
         }
         catch(KeyStoreException ex){
             Logger.getLogger(Token.class.getName()).log(Level.SEVERE, null, ex);
             activo = false;    
-            throw new AppletException(UtilesMsg.ERROR_ACCEDIENDO_TOKEN, null, ex.getCause());
-        }
-        catch(IOException ex){
+        }  
+        catch (IOException ex){
             Logger.getLogger(Token.class.getName()).log(Level.SEVERE, null, ex);
-            activo = false;  
-            throw new AppletException(UtilesMsg.ERROR_ACCEDIENDO_ARCHIVO, null, ex.getCause());
-        }     
+            throw new AppletException(ex.getMessage(), null, ex.getCause());
+        }
+        catch(Exception ex){
+            Logger.getLogger(Token.class.getName()).log(Level.SEVERE, null, ex);
+            activo = false;    
+        }
     }   
     
+    private void cargarConfiguracionInit() throws AppletException, KeyStoreException, IOException{
+
+        System.out.println("Token::cargarConfiguracionInit");
+
+        pkcs11config = Utiles.setKeyValue(UtilesResources.getProperty("appletConfig.paramName"), module);
+        pkcs11config += Utiles.setKeyValue(UtilesResources.getProperty("appletConfig.paramLibrary"), library);
+        pkcs11config += Utiles.setKeyValue(UtilesResources.getProperty("appletConfig.paramShowInfo"), showInfo.toString());
+        System.out.println("Config pkcs11: " + pkcs11config);            
+        ByteArrayInputStream confStream = new ByteArrayInputStream(pkcs11config.getBytes());
+        Provider prov = new sun.security.pkcs11.SunPKCS11( confStream );
+        activo = true;
+    }
+    
+    private void instanciarKeyStore() throws KeyStoreException{
+        System.out.println("Token::instanciarKeyStore");
+        ByteArrayInputStream confStream = new ByteArrayInputStream(pkcs11config.getBytes());
+        Provider prov = new sun.security.pkcs11.SunPKCS11( confStream );
+        Security.addProvider( prov );
+        keystore = KeyStore.getInstance("PKCS11");
+    }    
     
     
     //Operaciones
@@ -158,6 +167,14 @@ public class Token {
         this.listaCerts = listaCerts;
     }
     
+    public String getPkcs11config() {
+        return pkcs11config;
+    }
+
+    public void setPkcs11config(String pkcs11config) {
+        this.pkcs11config = pkcs11config;
+    }    
+    
     public void obtenerCertificados() throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
         
         if (isLogued()){
@@ -177,7 +194,9 @@ public class Token {
         return logued;
     }
     
-    public void login( String password ) throws IOException, NoSuchAlgorithmException, CertificateException{
+    public void login( String password ) throws IOException, NoSuchAlgorithmException, CertificateException, KeyStoreException{        
+        System.out.println("Token::login"); 
+        instanciarKeyStore();
         this.password = password;
         KeyStore.PasswordProtection pp = new KeyStore.PasswordProtection( password.toCharArray() );
         keystore.load(null , pp.getPassword() );
@@ -185,6 +204,8 @@ public class Token {
     }
     
     public void logout() throws LoginException{
+        System.out.println("Token::logout");
+        
         ((SunPKCS11) keystore.getProvider() ).logout();
         keystore.getProvider().clear();     
         password = null;        

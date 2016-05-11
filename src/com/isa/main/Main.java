@@ -110,6 +110,7 @@ public class Main extends javax.swing.JApplet implements ICommon{
         if (handler.isTokenActivo()){
             KeyStoreValidator.setKeystore(KeyStoreValidator.KEYSTORE_TOKEN);
         }
+        else throw new AppletException(UtilesMsg.ERROR_TOKEN_SIN_IDENTIFICAR, null, null);
     }   
     
     
