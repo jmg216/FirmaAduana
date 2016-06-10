@@ -10,23 +10,21 @@ import com.isa.exception.AppletException;
 import com.isa.token.HandlerToken;
 import com.isa.token.Token;
 import com.isa.utiles.Utiles;
-import com.isa.utiles.UtilesResources;
-import java.io.IOException;
 import java.security.AccessControlException;
 import java.security.KeyStoreException;
+import java.security.cert.X509Certificate;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import xades4j.XAdES4jException;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.production.DataObjectReference;
-import xades4j.production.Enveloped;
 import xades4j.production.SignedDataObjects;
 import xades4j.production.XadesBesSigningProfile;
 import xades4j.production.XadesSignatureResult;
 import xades4j.production.XadesSigner;
 import xades4j.production.XadesSigningProfile;
-import xades4j.properties.CommitmentTypeProperty;
 import xades4j.properties.DataObjectDesc;
 import xades4j.providers.KeyingDataProvider;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
@@ -98,6 +96,34 @@ public class FirmaXMLController {
             Logger.getLogger(FirmaXMLController.class.getName()).log(Level.SEVERE, null, e);
             throw new AppletException(e.getMessage(), null, e.getCause());
         }
+    }
+    
+    public XMLFirma getInfoFirma() throws AppletException {
+        System.out.println("FirmaXMLController::getInfoFirma");
+        try{
+            HandlerToken handler = ActualCertInfo.getInstance().getHandler();
+            Token token = handler.getTokenActivo();
+            HashMap aliasHash = ActualCertInfo.getInstance().getAliasHash();
+            int certIndex = ActualCertInfo.getInstance().getCertIndex();
+            String alias = (String) aliasHash.get(certIndex);            
+            
+            XMLFirma xmlfirma = new XMLFirma();
+            xmlfirma.setChainCert( token.getKeystore().getCertificateChain(alias) );
+            xmlfirma.setProvidername( token.getKeystore().getProvider().getName() );
+            //Definiendo apariencia de firma.        
+            X509Certificate c = (X509Certificate) token.getKeystore().getCertificate(alias);
+            xmlfirma.setNroSerie( Utiles.getSerialNumber( c.getSubjectDN().getName()) );
+            xmlfirma.setDn(c.getSubjectDN().getName());
+            xmlfirma.setFirmante(Utiles.getCN(c.getSubjectDN().getName()));
+            
+            return xmlfirma;
+        }
+        catch (KeyStoreException e){
+            e.printStackTrace();
+            throw new AppletException("Error al obtener información para firmas xades.", null, e.getCause());
+        }
         
     }
+    
+    
 }

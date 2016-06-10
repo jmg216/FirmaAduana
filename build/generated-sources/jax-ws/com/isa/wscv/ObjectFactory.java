@@ -25,11 +25,11 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _ValidarDocumentoByDocResponseReturn_QNAME = new QName("http://services.wsv.isa.com", "return");
     private final static QName _SignatureCn_QNAME = new QName("http://entities.wsv.isa.com/xsd", "cn");
     private final static QName _SignatureFecha_QNAME = new QName("http://entities.wsv.isa.com/xsd", "fecha");
     private final static QName _ValidarDocumentoByDocData_QNAME = new QName("http://services.wsv.isa.com", "data");
     private final static QName _ValidarDocumentoByDocTipo_QNAME = new QName("http://services.wsv.isa.com", "tipo");
-    private final static QName _ValidarDocumentoByParamsResponseReturn_QNAME = new QName("http://services.wsv.isa.com", "return");
     private final static QName _WSTXExceptionMensaje_QNAME = new QName("http://exceptions.wsv.isa.com/xsd", "mensaje");
     private final static QName _ValidarDocWSTXExceptionWSTXException_QNAME = new QName("http://services.wsv.isa.com", "WS_TXException");
 
@@ -105,6 +105,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link VerifyResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://services.wsv.isa.com", name = "return", scope = ValidarDocumentoByDocResponse.class)
+    public JAXBElement<VerifyResponse> createValidarDocumentoByDocResponseReturn(VerifyResponse value) {
+        return new JAXBElement<VerifyResponse>(_ValidarDocumentoByDocResponseReturn_QNAME, VerifyResponse.class, ValidarDocumentoByDocResponse.class, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
@@ -146,16 +155,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://services.wsv.isa.com", name = "return", scope = ValidarDocumentoByParamsResponse.class)
     public JAXBElement<VerifyResponse> createValidarDocumentoByParamsResponseReturn(VerifyResponse value) {
-        return new JAXBElement<VerifyResponse>(_ValidarDocumentoByParamsResponseReturn_QNAME, VerifyResponse.class, ValidarDocumentoByParamsResponse.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link VerifyResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://services.wsv.isa.com", name = "return", scope = ValidarDocumentoByDocResponse.class)
-    public JAXBElement<VerifyResponse> createValidarDocumentoByDocResponseReturn(VerifyResponse value) {
-        return new JAXBElement<VerifyResponse>(_ValidarDocumentoByParamsResponseReturn_QNAME, VerifyResponse.class, ValidarDocumentoByDocResponse.class, value);
+        return new JAXBElement<VerifyResponse>(_ValidarDocumentoByDocResponseReturn_QNAME, VerifyResponse.class, ValidarDocumentoByParamsResponse.class, value);
     }
 
     /**

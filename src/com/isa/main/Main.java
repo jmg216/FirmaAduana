@@ -14,6 +14,7 @@ import com.isa.exception.AppletException;
 import com.isa.firma.pades.FirmaPDFController;
 import com.isa.firma.pades.PDFFirma;
 import com.isa.firma.xades.FirmaXMLController;
+import com.isa.firma.xades.XMLFirma;
 import com.isa.front.ListaCertsJPanel;
 import com.isa.front.LoginJPanel;
 import com.isa.front.MensajeJPanel;
@@ -162,6 +163,8 @@ public class Main extends javax.swing.JApplet implements ICommon{
                     if (tipo == 2){
                         //firma xml 
                         FirmaXMLController firmaxmlcontroller = FirmaXMLController.getInstance();
+                        XMLFirma xmlfirma = firmaxmlcontroller.getInfoFirma();
+                        p.add(xmlfirma.getDn());
                         dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( p );
                         byte[] xml  = dElectronico.getDocumento().getValue();
                         String strXML = new String(xml);
@@ -188,7 +191,7 @@ public class Main extends javax.swing.JApplet implements ICommon{
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
                     }
                     
-                    int codigoRespuesta = UtilesWS.getInstancePortWS().guardarDocumento(dElectronico, Arrays.asList(params) );
+                    int codigoRespuesta = UtilesWS.getInstancePortWS().guardarDocumento(dElectronico, p );
                     
                     switch( codigoRespuesta ){
                         case -1:ManejadorPaneles.showPanelMessageError( UtilesMsg.ERROR_GUARDANDO_DOCUMENTO );
