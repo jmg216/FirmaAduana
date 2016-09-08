@@ -57,7 +57,9 @@ public class UtilesResources {
     public static final String PROP_WS_ENDPOINT_VALIDACION = "appletConfig.WSEndpointValidacion";
     public static final String PROP_WS_AUTH = "appletConfig.WSAutenticacion";
     public static final String PROP_WS_USER = "appletConfig.WSUser";    
-    public static final String PROP_WS_PASSWD = "appletConfig.WSPasswd";       
+    public static final String PROP_WS_PASSWD = "appletConfig.WSPasswd";    
+    
+    public static final String TAG_INTENALLY_DETACHED = "appletConfig.TagNameInternallyDetached"; 
    
     private static UtilesResources instance;
     private static String rutaProperties;
