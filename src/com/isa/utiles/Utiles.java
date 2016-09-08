@@ -6,6 +6,8 @@ package com.isa.utiles;
  * and open the template in the editor.
  */
 
+import com.isa.firma.pades.PDFFirma;
+import com.isa.firma.xades.XMLFirma;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -56,7 +58,9 @@ public class Utiles {
     public static String TRUE_VALUE = "true";
     public static String PARAM_TIPO_FIRMA = "tipoFirma";
     public static String VALUE_TIPO_FIRMA_PKCS7 = "pkcs7";
-    public static String VALUE_TIPO_FIRMA_XADES_ENVELOPED = "xades";
+    public static String VALUE_TIPO_FIRMA_XADES_ENVELOPED = "xades_enved";
+    public static String VALUE_TIPO_FIRMA_XADES_ENVELOPING = "xades_enving";
+    public static String VALUE_TIPO_FIRMA_XADES_DETACHED = "xades_detached";
     public static String VALUE_TIPO_FIRMA_PADES = "pades";
     
     public static String PREFIJO_CIE = "CIE";
@@ -329,7 +333,7 @@ public class Utiles {
         try {
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
             String output = writer.getBuffer().toString();
@@ -404,12 +408,26 @@ public class Utiles {
     
     public static int getNumeroTipoFirma( String tipo ){
         if (tipo.equals(VALUE_TIPO_FIRMA_PADES)){
-            return 1;
+            return PDFFirma.PADES;
         }
         else if (tipo.equals(VALUE_TIPO_FIRMA_XADES_ENVELOPED)){
-            return 2;
+            return XMLFirma.XADES_ENVED;
         }
+        else if (tipo.equals(VALUE_TIPO_FIRMA_XADES_ENVELOPING)){
+            return XMLFirma.XADES_ENVING;
+        }
+        else if (tipo.equals(VALUE_TIPO_FIRMA_XADES_DETACHED)){
+            return XMLFirma.XADES_DETACHED;
+        }        
         return -1;
+    }
+    
+    public static boolean isPAdES( int tipo ){
+        return tipo == PDFFirma.PADES;
+    }
+    
+    public static boolean isXAdES( int tipo ){  
+        return tipo == XMLFirma.XADES_ENVED || tipo == XMLFirma.XADES_ENVING || tipo == XMLFirma.XADES_DETACHED;
     }
     
  

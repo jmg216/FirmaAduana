@@ -5,6 +5,7 @@
  */
 package com.isa.firma.pades;
 
+import com.isa.firma.folder.Firma;
 import com.isa.utiles.UtilesResources;
 import java.io.IOException;
 import java.security.PrivateKey;
@@ -14,7 +15,7 @@ import java.security.cert.Certificate;
  *
  * @author JMiraballes
  */
-public class PDFFirma {
+public class PDFFirma extends Firma{
 
     private PrivateKey pk;
     private Certificate[] chainCert;

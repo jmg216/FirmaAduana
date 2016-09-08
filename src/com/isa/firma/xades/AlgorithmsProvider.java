@@ -26,7 +26,7 @@ public class AlgorithmsProvider extends DefaultAlgorithmsProviderEx {
 
     @Override
     public Algorithm getCanonicalizationAlgorithmForSignature() {
-        return new Algorithm("http://www.w3.org/2001/10/xml-exc-c14n#") {};
+        return new Algorithm("http://www.w3.org/TR/2001/REC-xml-c14n-20010315") {};
     }
 
     @Override

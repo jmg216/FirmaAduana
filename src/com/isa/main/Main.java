@@ -145,9 +145,9 @@ public class Main extends javax.swing.JApplet implements ICommon{
                         p.add(params[i]);
                     }
                     Documento dElectronico = null;
-                            
+                    
                     //firma pdf
-                    if (tipo == 1){
+                    if (Utiles.isPAdES(tipo)){
                         FirmaPDFController firmapdfcontroller = FirmaPDFController.getInstance();
                         PDFFirma infoFirma = firmapdfcontroller.generarApariencia();
                         p.add(infoFirma.getDn());
@@ -160,19 +160,22 @@ public class Main extends javax.swing.JApplet implements ICommon{
                         dElectronico.getDocumento().setValue( pdfOS.toByteArray() );                        
                     }
 
-                    if (tipo == 2){
+                    else if (Utiles.isXAdES(tipo)){
                         //firma xml 
                         FirmaXMLController firmaxmlcontroller = FirmaXMLController.getInstance();
-                        XMLFirma xmlfirma = firmaxmlcontroller.getInfoFirma();
+                        firmaxmlcontroller.generateInfoFirma();
+                        firmaxmlcontroller.getXmlfirma().setTipoFirma(tipo);
+                        XMLFirma xmlfirma = firmaxmlcontroller.getXmlfirma();
+                        
                         p.add(xmlfirma.getDn());
                         dElectronico = UtilesWS.getInstancePortWS().obtenerDocumentoParaFirmar( p );
                         byte[] xml  = dElectronico.getDocumento().getValue();
                         String strXML = new String(xml);
                         String xmlFirmado = firmaxmlcontroller.firmarXades(strXML);
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.DOC_FIRMADO_OK );
-                        dElectronico.getDocumento().setValue( xmlFirmado.getBytes() );  
-                        
+                        dElectronico.getDocumento().setValue( xmlFirmado.getBytes() );   
                     }
+                    
                     //validar firma
                     if (isValidar()){
                         ManejadorPaneles.showPanelMessageInfo( UtilesMsg.PROCESANDO_VALIDACION );
@@ -239,10 +242,14 @@ public class Main extends javax.swing.JApplet implements ICommon{
                 } 
                 catch (ValidarDocWSTXException_Exception ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     ManejadorPaneles.showPanelMessageError( ex.getFaultInfo().getWSTXException().getValue().getMensaje().getValue() );
                     firmaError( ex.getFaultInfo().getWSTXException().getValue().getMensaje().getValue() );                    
                 } 
+                catch (Exception ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    ManejadorPaneles.showPanelMessageError( ex.getMessage() );
+                    firmaError( ex.getMessage() );                    
+                }                 
             }
         };
         thread.start();

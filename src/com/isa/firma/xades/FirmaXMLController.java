@@ -10,6 +10,7 @@ import com.isa.exception.AppletException;
 import com.isa.token.HandlerToken;
 import com.isa.token.Token;
 import com.isa.utiles.Utiles;
+import com.isa.utiles.UtilesResources;
 import java.security.AccessControlException;
 import java.security.KeyStoreException;
 import java.security.cert.X509Certificate;
@@ -20,13 +21,16 @@ import org.w3c.dom.Document;
 import xades4j.XAdES4jException;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 import xades4j.production.DataObjectReference;
+import xades4j.production.EnvelopedXmlObject;
 import xades4j.production.SignedDataObjects;
 import xades4j.production.XadesBesSigningProfile;
 import xades4j.production.XadesSignatureResult;
 import xades4j.production.XadesSigner;
 import xades4j.production.XadesSigningProfile;
 import xades4j.properties.DataObjectDesc;
+import xades4j.providers.BasicSignatureOptionsProvider;
 import xades4j.providers.KeyingDataProvider;
+import xades4j.providers.impl.DefaultBasicSignatureOptionsProvider;
 import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 
 /**
@@ -36,6 +40,7 @@ import xades4j.providers.impl.PKCS11KeyStoreKeyingDataProvider;
 public class FirmaXMLController {    
     
     private static FirmaXMLController firmaXMLController;
+    private XMLFirma xmlfirma;
     
     public FirmaXMLController(){}
     
@@ -58,26 +63,33 @@ public class FirmaXMLController {
                                             new DirectPasswordProvider( ActualCertInfo.getInstance().getPassword()),
                                             null,
                                             true );
-            System.out.println("Se instancia PKCS11.");
+            XadesSigningProfile p = new XadesBesSigningProfile( kp ).withBasicSignatureOptionsProvider(new BasicSignatureOptionsProvider() {
+                @Override
+                public boolean includeSigningCertificate() {
+                    return true;
+                }
+
+                @Override
+                public boolean includePublicKey() {
+                    return true;
+                }
+
+                @Override
+                public boolean signSigningCertificate() {
+                    return false;
+                }
+            });
             
-            XadesSigningProfile p = new XadesBesSigningProfile( kp );
             XadesSigner signer = p.newSigner();
-            AlgorithmsProvider algorithmProvider = new AlgorithmsProvider();
-            p.withAlgorithmsProviderEx( algorithmProvider );
-       
             System.out.println("Se crea nodo a firmar.");
             NodoFirma nodoFirma = new NodoFirma( dataToSign );
             Document doc = nodoFirma.getDocument();
-            
-            //data object reference.
+
             System.out.println("******* Previo a firmar ***************");
-            //new Enveloped(signer).sign( doc.getDocumentElement() );
-            DataObjectDesc obj1 = new DataObjectReference("")
-                .withTransform(new EnvelopedSignatureTransform());
-            XadesSignatureResult result = signer.sign(new SignedDataObjects(obj1), doc.getDocumentElement());
+            XadesSignatureResult result  = getXmlfirma().firmar(signer, doc);
             System.out.println("******** Firmado **************");
             String xmlSignature = Utiles.printDocument(result.getSignature().getDocument());
-            //String xmlSignatureBase64 = org.apache.xml.security.utils.Base64.encode(xmlSignature.getBytes());
+
             return xmlSignature;
         }
         catch(AccessControlException e){
@@ -98,7 +110,7 @@ public class FirmaXMLController {
         }
     }
     
-    public XMLFirma getInfoFirma() throws AppletException {
+    public void generateInfoFirma() throws AppletException {
         System.out.println("FirmaXMLController::getInfoFirma");
         try{
             HandlerToken handler = ActualCertInfo.getInstance().getHandler();
@@ -115,8 +127,7 @@ public class FirmaXMLController {
             xmlfirma.setNroSerie( Utiles.getSerialNumber( c.getSubjectDN().getName()) );
             xmlfirma.setDn(c.getSubjectDN().getName());
             xmlfirma.setFirmante(Utiles.getCN(c.getSubjectDN().getName()));
-            
-            return xmlfirma;
+            this.xmlfirma = xmlfirma;
         }
         catch (KeyStoreException e){
             e.printStackTrace();
@@ -124,6 +135,15 @@ public class FirmaXMLController {
         }
         
     }
+
+    public XMLFirma getXmlfirma() {
+        return xmlfirma;
+    }
+
+    public void setXmlfirma(XMLFirma xmlfirma) {
+        this.xmlfirma = xmlfirma;
+    }
+    
     
     
 }
